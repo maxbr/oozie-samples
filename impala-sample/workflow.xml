@@ -1,0 +1,26 @@
+<workflow-app name="shell-impala-invalidate-wf" xmlns="uri:oozie:workflow:0.4">
+   <start to="shell-impala-invalidate"/>
+   <action name="shell-impala-invalidate">
+      <shell xmlns="uri:oozie:shell-action:0.1">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <configuration>
+            <property>
+               <name>mapred.job.queue.name</name>
+               <value>${queueName}</value>
+            </property>
+         </configuration>
+         <exec>impala-shell.sh</exec>
+         <file>/user/jenkins/oozie-samples/impala-sample/impala-shell.sh</file>
+         <file>/user/jenkins/oozie-samples/impala-sample/impala-query.sql</file>
+         <!--file>cconner.keytab#cconner.keytab</file-->
+      </shell>
+      <ok to="end"/>
+      <error to="kill"/>
+   </action>
+   <kill name="kill">
+      <message>Action failed, error
+         message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+   </kill>
+   <end name="end"/>
+</workflow-app>

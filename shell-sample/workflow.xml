@@ -1,0 +1,24 @@
+<workflow-app name="shell-sample" xmlns="uri:oozie:workflow:0.3">
+   <start to="echo-hello-world" />
+   <action name="echo-hello-world">
+      <shell xmlns="uri:oozie:shell-action:0.1">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <configuration>
+            <property>
+               <name>mapred.job.queue.name</name>
+               <value>${queueName}</value>
+            </property>
+         </configuration>
+         <exec>helloworld.sh</exec>
+         <file>/user/jenkins/oozie-samples/shell-sample/helloworld.sh</file>
+      </shell>
+      <ok to="end" />
+      <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>something is wrong!</message>
+   </kill>
+   <end name="end" />
+
+</workflow-app> 

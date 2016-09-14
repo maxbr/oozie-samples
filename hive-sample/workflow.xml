@@ -1,0 +1,25 @@
+<workflow-app name="shell-sample" xmlns="uri:oozie:workflow:0.3"> 
+   <start to="hive-action" />
+   <action name="hive-action">
+      <hive xmlns="uri:oozie:hive-action:0.2">
+         <job-tracker>${jobTracker}</job-tracker>
+         <name-node>${nameNode}</name-node>
+         <prepare></prepare>
+         <job-xml>/user/jenkins/hive-site2.xml</job-xml>
+         <configuration>
+            <property>
+               <name>oozie.log.hive.level</name>
+               <value>DEBUG</value>
+            </property>
+         </configuration>
+         <script>hive-query.hql</script>
+         <file>/user/jenkins/oozie-samples/hive-sample/hive-query.hql</file>
+      </hive>
+      <ok to="end" />
+      <error to="fail" />
+   </action>
+   <kill name="fail">
+      <message>something is wrong!</message>
+   </kill>
+   <end name="end" />
+</workflow-app>
